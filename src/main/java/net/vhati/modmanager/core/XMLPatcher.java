@@ -331,8 +331,6 @@ public class XMLPatcher {
 				if ( isNot ) {
 					Set<Element> nandidateSet = new HashSet<Element>();
 					for ( Content content : contextNode.getContent() ) {
-						//getContent returns all kinds of shit without a filter, we only care about the child elements
-						//but it's not worthwhile writing a filter for a simple task like this since I don't know how filters work
 						if (content instanceof Element) {
 							nandidateSet.add( (Element)content );
 						}
@@ -548,14 +546,35 @@ public class XMLPatcher {
 					tmp = node.getAttributeValue( attrName );
 
 					if ( attrValue.equals( tmp ) == false ) {
-						return null;
+						//regex check
+						if ( attrValue.length() >= 6 && attrValue.substring(0, 6).equals( "regex:" ) ) {
+							if ( tmp == null ) {
+								return null;
+							}
+							Pattern pattern = Pattern.compile( attrValue.substring(6) );
+							Matcher matcher = pattern.matcher( tmp );
+							if ( !matcher.find() ) {
+								return null;
+							}
+						} else {
+							return null;
+						}
 					}
 				}
 			}
 
 			if ( value != null ) {
 				if ( value.equals( node.getTextTrim() ) == false ) {
-					return null;
+					//regex check
+					if ( value.length() >= 6 && value.substring(0, 6).equals( "regex:" ) ) {
+						Pattern pattern = Pattern.compile( value.substring(6) );
+						Matcher matcher = pattern.matcher( node.getTextTrim() );
+						if ( !matcher.find() ) {
+							return null;
+						}
+					} else {
+						return null;
+					}
 				}
 			}
 			return node;

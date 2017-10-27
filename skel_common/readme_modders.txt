@@ -142,6 +142,10 @@ Advanced XML
       and the given value. All of these find arguments are optional. To
       omit the value, leave it blank, or make <selector /> self-closing.
       If no value or attributes are given, <selector> is unnecessary.
+      1.7 adds support for Regular Expression searches, simply begin the
+      value of the element or attribute with  "regex:" (no quotes),
+      for example <mod:selector a="regex:.*"/> will match any element
+      with the a attribute, regardless of its value.
 
     <mod:findWithChildLike type="abc" child-type="def">
       <mod:selector a="1" b="2" ...>abc</mod:selector>
@@ -164,6 +168,7 @@ Advanced XML
       nested <par>entheses. The <par> combines results using "OR" (union)
       or "AND" (intersection) logic. Any commands within those <find...>
       tags will be ignored.
+      1.7 adds NOR and NAND (complement of OR and AND, respectively).
 
 
   The following commands can occur inside a <find...>.
